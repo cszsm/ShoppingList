@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Add new item"/>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Name"/>
+
+        <EditText
+            android:id="@+id/newItemName"
+            android:layout_width="match_parent"/>
+    </TableRow>
+
+    <TableRow>
+        <Button
+            android:text="Add"
+            android:id="@+id/btnAddItem"/>
+        <Button
+            android:text="Cancel"
+            android:id="@+id/btnCancel"/>
+    </TableRow>
+
+</TableLayout>
