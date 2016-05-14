@@ -9,7 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +17,6 @@ import android.widget.TextView;
 
 import com.zscseh93.data.Item;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,6 +41,8 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
     //    private List<Item> mItems;
     private SimpleItemRecyclerViewAdapter mItems;
 
+    private ItemTouchHelper mItemTouchHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +66,24 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
             }
         });
 
-        View recyclerView = findViewById(R.id.item_list);
+        final View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
+        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                mItems.onItemDismiss(viewHolder.getAdapterPosition());
+            }
+        });
+        mItemTouchHelper.attachToRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -101,8 +116,13 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
 //        mItems.notifyDataSetChanged();
 //    }
 
+    private interface ItemTouchHelperAdapter {
+        void onItemDismiss(int position);
+    }
+
     private class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> implements
+            ItemTouchHelperAdapter {
 
         private List<Item> mValues;
 
@@ -155,6 +175,12 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
             notifyDataSetChanged();
         }
 
+        @Override
+        public void onItemDismiss(int position) {
+            mValues.get(position).delete();
+            mValues.remove(position);
+            notifyItemRemoved(position);
+        }
 
 
         public class ViewHolder extends RecyclerView.ViewHolder {
