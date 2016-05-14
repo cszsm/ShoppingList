@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.zscseh93.data.Item;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,6 +31,8 @@ import java.util.List;
  */
 public class ItemListActivity extends AppCompatActivity implements ItemCreateFragment
         .ItemContainer {
+
+    private static final String LOG_TAG = "ItemListActivity";
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -49,8 +53,7 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
         assert toolbar != null;
         toolbar.setTitle(getTitle());
 
-        List<Item> items = new ArrayList<>();
-        mItems = new SimpleItemRecyclerViewAdapter(items);
+        mItems = new SimpleItemRecyclerViewAdapter();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -76,23 +79,34 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mItems.update();
+    }
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(mItems);
     }
 
     @Override
-    public void addItem(Item item) {
-        mItems.addItem(item);
-        mItems.notifyDataSetChanged();
+    public void update() {
+        mItems.update();
     }
 
-    public class SimpleItemRecyclerViewAdapter
+//    @Override
+//    public void addItem(Item item) {
+//        mItems.addItem(item);
+//        mItems.notifyDataSetChanged();
+//    }
+
+    private class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Item> mValues;
+        private List<Item> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Item> items) {
-            mValues = items;
+        public SimpleItemRecyclerViewAdapter() {
         }
 
         @Override
@@ -106,7 +120,7 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             assert holder.mItem != null;
-            holder.mNameView.setText(mValues.get(position).getName());
+            holder.mNameView.setText(holder.mItem.getName());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,9 +150,12 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
             return mValues.size();
         }
 
-        public void addItem(Item item) {
-            mValues.add(item);
+        public void update() {
+            mValues = Item.listAll(Item.class);
+            notifyDataSetChanged();
         }
+
+
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;

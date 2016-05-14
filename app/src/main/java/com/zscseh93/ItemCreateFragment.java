@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,10 @@ public class ItemCreateFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Item newItem = new Item(String.valueOf(mEditItemName.getText()));
-                mItemContainer.addItem(newItem);
+//                mItemContainer.addItem(newItem);
+                newItem.save();
+                Log.d(TAG, "askdfsd");
+                mItemContainer.update();
                 dismiss();
             }
         });
@@ -62,6 +66,6 @@ public class ItemCreateFragment extends DialogFragment {
     }
 
     public interface ItemContainer {
-        void addItem(Item item);
+        void update();
     }
 }

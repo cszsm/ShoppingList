@@ -7,7 +7,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="com.orm.SugarApp">
         <activity
             android:name=".ItemListActivity"
             android:label="@string/app_name"
@@ -27,6 +28,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zscseh93.ItemListActivity"/>
         </activity>
+        <meta-data android:name="DATABASE" android:value="shopping_list.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.zscseh93.data" />
     </application>
 
 </manifest>
