@@ -27,6 +27,7 @@ public class ItemCreateFragment extends DialogFragment {
     public static final String TAG = "ItemCreateFragment";
 
     private EditText mEditItemName;
+    private EditText mEditItemPrice;
 
     private ItemContainer mItemContainer;
 
@@ -50,15 +51,17 @@ public class ItemCreateFragment extends DialogFragment {
         getDialog().setTitle("Add new item");
 
         mEditItemName = (EditText) mRoot.findViewById(R.id.newItemName);
+        mEditItemPrice = (EditText) mRoot.findViewById(R.id.newItemPrice);
 
         Button btnAddItem = (Button) mRoot.findViewById(R.id.btnAddItem);
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Item newItem = new Item(String.valueOf(mEditItemName.getText()));
+                newItem.setPrice(Integer.parseInt(String.valueOf(mEditItemPrice.getText())));
 
                 if (mLastPlace != null) {
-                    newItem.setPlace(mLastPlace.getId(), String.valueOf(mLastPlace.getName()), String.valueOf(mLastPlace.getAddress()));
+                    newItem.setPlace(String.valueOf(mLastPlace.getName()), String.valueOf(mLastPlace.getAddress()), mLastPlace.getLatLng());
                     Log.d(TAG, String.valueOf(mLastPlace.getName()));
                 }
 //                mItemContainer.addItem(newItem);

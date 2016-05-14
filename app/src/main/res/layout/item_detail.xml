@@ -5,6 +5,13 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tvPrice"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"/>
+
+    <TextView
         android:id="@+id/tvPlaceName"
         style="?android:attr/textAppearanceLarge"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:textIsSelectable="true"
         tools:context="com.zscseh93.ItemDetailFragment"/>
 
     <TextView
@@ -20,5 +26,10 @@
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sápafokdspfokasdpof"/>
+        android:padding="16dp"/>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
 </LinearLayout>

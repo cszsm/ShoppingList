@@ -9,6 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.zscseh93.data.Item;
 
 public class ItemDetailFragment extends Fragment {
@@ -16,6 +23,8 @@ public class ItemDetailFragment extends Fragment {
     public static final String ARG_ITEM = "item";
 
     private Item mItem;
+
+    private MapView mMapView;
 
     public ItemDetailFragment() {
     }
@@ -41,6 +50,9 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
+        TextView tvPrice = (TextView) rootView.findViewById(R.id.tvPrice);
+        String price = mItem.getPrice() + " Ft";
+        tvPrice.setText(price);
 //        if (mItem != null) {
         if (mItem.getPlaceName() != null) {
             TextView tvPlaceName = (TextView) rootView.findViewById(R.id.tvPlaceName);
@@ -52,8 +64,56 @@ public class ItemDetailFragment extends Fragment {
             tvPlaceAddress.setText(mItem.getPlaceAddress());
         }
 
+        if (mItem.getPlaceLatLng() != null) {
+            mMapView = (MapView) rootView.findViewById(R.id.mapview);
+            mMapView.onCreate(savedInstanceState);
+
+            GoogleMapReady googleMapReady = new GoogleMapReady();
+            mMapView.getMapAsync(googleMapReady);
+        }
+
 //        }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+    private class GoogleMapReady implements OnMapReadyCallback {
+
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mItem.getPlaceLatLng(), 16.0f));
+            googleMap.addMarker(new MarkerOptions().position(mItem.getPlaceLatLng()).title(mItem.getPlaceName()));
+            googleMap.getUiSettings().setAllGesturesEnabled(false);
+        }
     }
 }

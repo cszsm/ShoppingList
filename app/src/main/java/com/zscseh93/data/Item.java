@@ -3,6 +3,7 @@ package com.zscseh93.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.orm.SugarRecord;
 
 /**
@@ -24,9 +25,11 @@ public class Item extends SugarRecord implements Parcelable {
 
     private String mItemId;
     private String mName;
-    private String mPlaceId = null;
+    private int mPrice;
     private String mPlaceName = null;
     private String mPlaceAddress = null;
+    private double mLat;
+    private double mLng;
 
     private static int sLastId = 0;
 
@@ -42,9 +45,11 @@ public class Item extends SugarRecord implements Parcelable {
     public Item(Parcel parcel) {
         mItemId = parcel.readString();
         mName = parcel.readString();
-        mPlaceId = parcel.readString();
+        mPrice = parcel.readInt();
         mPlaceName = parcel.readString();
         mPlaceAddress = parcel.readString();
+        mLat = parcel.readDouble();
+        mLng = parcel.readDouble();
     }
 
 
@@ -60,8 +65,12 @@ public class Item extends SugarRecord implements Parcelable {
         mName = name;
     }
 
-    public String getPlaceId() {
-        return mPlaceId;
+    public int getPrice() {
+        return mPrice;
+    }
+
+    public void setPrice(int price) {
+        mPrice = price;
     }
 
     public String getPlaceName() {
@@ -72,10 +81,15 @@ public class Item extends SugarRecord implements Parcelable {
         return mPlaceAddress;
     }
 
-    public void setPlace(String placeId, String placeName, String placeAddress) {
-        mPlaceId = placeId;
+    public LatLng getPlaceLatLng() {
+        return new LatLng(mLat, mLng);
+    }
+
+    public void setPlace(String placeName, String placeAddress, LatLng placeLatLng) {
         mPlaceName = placeName;
         mPlaceAddress = placeAddress;
+        mLat = placeLatLng.latitude;
+        mLng = placeLatLng.longitude;
     }
 
     @Override
@@ -87,8 +101,10 @@ public class Item extends SugarRecord implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mItemId);
         dest.writeString(mName);
-        dest.writeString(mPlaceId);
+        dest.writeInt(mPrice);
         dest.writeString(mPlaceName);
         dest.writeString(mPlaceAddress);
+        dest.writeDouble(mLat);
+        dest.writeDouble(mLng);
     }
 }
