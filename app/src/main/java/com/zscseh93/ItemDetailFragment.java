@@ -1,8 +1,8 @@
 package com.zscseh93;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,8 @@ public class ItemDetailFragment extends Fragment {
             mItem = getArguments().getParcelable(ARG_ITEM);
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity
+                    .findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.getName());
             }
@@ -40,9 +41,18 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.getName());
+//        if (mItem != null) {
+        if (mItem.getPlaceName() != null) {
+            TextView tvPlaceName = (TextView) rootView.findViewById(R.id.tvPlaceName);
+            tvPlaceName.setText(mItem.getPlaceName());
         }
+
+        if (mItem.getPlaceAddress() != null) {
+            TextView tvPlaceAddress = (TextView) rootView.findViewById(R.id.tvPlaceAddress);
+            tvPlaceAddress.setText(mItem.getPlaceAddress());
+        }
+
+//        }
 
         return rootView;
     }
