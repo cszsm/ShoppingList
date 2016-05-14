@@ -37,7 +37,7 @@ public class ItemCreateFragment extends DialogFragment {
             savedInstanceState) {
         View root = inflater.inflate(R.layout.item_create, container, false);
 
-        getDialog().setTitle("Add new item (dialog title)");
+        getDialog().setTitle("Add new item");
 
         mEditItemName = (EditText) root.findViewById(R.id.newItemName);
 
@@ -48,7 +48,6 @@ public class ItemCreateFragment extends DialogFragment {
                 Item newItem = new Item(String.valueOf(mEditItemName.getText()));
 //                mItemContainer.addItem(newItem);
                 newItem.save();
-                Log.d(TAG, "askdfsd");
                 mItemContainer.update();
                 dismiss();
             }
