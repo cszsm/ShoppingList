@@ -10,16 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.zscseh93.data.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +46,10 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
     private SimpleItemRecyclerViewAdapter mItems;
 
     private ItemTouchHelper mItemTouchHelper;
+
+    private GoogleMap mMap;
+    private List<Geofence> mGeofences;
+    private GeofenceStore mGeofenceStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,24 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        update();
+
+        mGeofences = new ArrayList<>();
+
+        for (Item i :
+                mItems.mValues) {
+
+            mGeofences.add(new Geofence.Builder()
+                    .setRequestId(i.getName())
+                    .setCircularRegion(i.getPlaceLatLng().latitude, i.getPlaceLatLng().longitude,
+                            1000)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .build());
+        }
+
+        mGeofenceStore = new GeofenceStore(this, mGeofences);
     }
 
     @Override
@@ -106,6 +129,11 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(mItems);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override

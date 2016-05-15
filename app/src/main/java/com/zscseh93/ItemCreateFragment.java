@@ -2,8 +2,8 @@ package com.zscseh93;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +18,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.zscseh93.data.Item;
@@ -72,6 +76,19 @@ public class ItemCreateFragment extends DialogFragment {
                     newItem.setPlace(String.valueOf(mLastPlace.getName()), String.valueOf
                             (mLastPlace.getAddress()), mLastPlace.getLatLng());
                     Log.d(TAG, String.valueOf(mLastPlace.getName()));
+
+//                    Geofence geofence = new Geofence.Builder().setRequestId(mLastPlace.getId())
+//                            .setCircularRegion(mLastPlace.getLatLng().latitude, mLastPlace
+//                                    .getLatLng().longitude, 1000)
+//                            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER).
+//                    setExpirationDuration(Geofence.NEVER_EXPIRE).build();
+//
+//                    GeofencingRequest geofencingRequest = getGeofencingRequest(geofence);
+//                    PendingIntent pendingIntent = getGeofencePendingIntent();
+//
+//                    GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this);
+//
+//                    LocationServices.GeofencingApi.addGeofences(, geofencingRequest, pendingIntent);
                 }
 
                 if (mLastImageFileName != null) {
@@ -156,6 +173,18 @@ public class ItemCreateFragment extends DialogFragment {
         File storageDir = getActivity().getExternalFilesDir(null);
 
         return File.createTempFile(mLastImageFileName, ".jpg", storageDir);
+    }
+
+    private GeofencingRequest getGeofencingRequest(Geofence geofence) {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofence(geofence);
+        return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        Intent intent = new Intent(getActivity(), GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public interface ItemContainer {
