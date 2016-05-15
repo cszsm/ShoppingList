@@ -62,6 +62,9 @@ public class GeofenceStore implements GoogleApiClient.ConnectionCallbacks, Googl
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
+        if(mGeofences.isEmpty()) {
+            return;
+        }
         mGeofencingRequest = new GeofencingRequest.Builder().addGeofences(mGeofences).build();
 
         mPendingIntent = createRequestPendingIntent();

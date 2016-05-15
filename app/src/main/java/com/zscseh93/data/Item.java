@@ -24,6 +24,7 @@ public class Item extends SugarRecord implements Parcelable {
     };
 
     private String mName;
+    private int mQuantity;
     private int mPrice;
     private String mPlaceName = null;
     private String mPlaceAddress = null;
@@ -40,6 +41,7 @@ public class Item extends SugarRecord implements Parcelable {
 
     public Item(Parcel parcel) {
         mName = parcel.readString();
+        mQuantity = parcel.readInt();
         mPrice = parcel.readInt();
         mPlaceName = parcel.readString();
         mPlaceAddress = parcel.readString();
@@ -54,6 +56,14 @@ public class Item extends SugarRecord implements Parcelable {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public int getQuantity() {
+        return mQuantity;
+    }
+
+    public void setQuantity(int quantity) {
+        mQuantity = quantity;
     }
 
     public int getPrice() {
@@ -99,6 +109,7 @@ public class Item extends SugarRecord implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
+        dest.writeInt(mQuantity);
         dest.writeInt(mPrice);
         dest.writeString(mPlaceName);
         dest.writeString(mPlaceAddress);

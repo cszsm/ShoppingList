@@ -15,6 +15,8 @@ import android.widget.ImageView;
 
 import com.zscseh93.data.Item;
 
+import java.io.File;
+
 /**
  * An activity representing a single Item detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -30,15 +32,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -47,12 +40,15 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         Item item = getIntent().getExtras().getParcelable(ItemDetailFragment.ARG_ITEM);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(item.getPhotoFileName() + ".jpg", options);
+        if (item.getPhotoFileName() != null) {
 
-        ImageView imageView = (ImageView) findViewById(R.id.toolbarImage);
-        imageView.setImageBitmap(bitmap);
+
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap = BitmapFactory.decodeFile(item.getPhotoFileName() + ".jpg", options);
+
+            showImage(item);
+        }
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -91,5 +87,27 @@ public class ItemDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showImage(Item item) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        File file = null;
+        File storageDir = getExternalFilesDir(null);
+        File[] asd = storageDir.listFiles();
+        for (File s :
+                asd) {
+            if (s.getName().contains(item.getPhotoFileName())) {
+                file = s;
+            }
+        }
+
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath()/*mItem.getPhotoFileName() + "1088038940.jpg"*/, options);
+//        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 1080, 608, false);
+
+        ImageView imageView = (ImageView) findViewById(R.id.toolbarImage);
+        imageView.setImageBitmap(bitmap);
+        imageView.requestLayout();
     }
 }

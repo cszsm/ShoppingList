@@ -41,6 +41,7 @@ public class ItemCreateFragment extends DialogFragment {
     private static final int REQUEST_IMAGE_CAPTURE = 2;
 
     private EditText mEditItemName;
+    private EditText mEditItemQuantity;
     private EditText mEditItemPrice;
     private ItemContainer mItemContainer;
     private View mRoot;
@@ -63,6 +64,7 @@ public class ItemCreateFragment extends DialogFragment {
         getDialog().setTitle("Add new item");
 
         mEditItemName = (EditText) mRoot.findViewById(R.id.newItemName);
+        mEditItemQuantity = (EditText) mRoot.findViewById(R.id.newItemQuantity);
         mEditItemPrice = (EditText) mRoot.findViewById(R.id.newItemPrice);
 
         Button btnAddItem = (Button) mRoot.findViewById(R.id.btnAddItem);
@@ -70,7 +72,17 @@ public class ItemCreateFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Item newItem = new Item(String.valueOf(mEditItemName.getText()));
-                newItem.setPrice(Integer.parseInt(String.valueOf(mEditItemPrice.getText())));
+
+                String quantity = String.valueOf(mEditItemQuantity.getText());
+                if (quantity.equals("")) {
+                    quantity = "1";
+                }
+                newItem.setQuantity(Integer.parseInt(quantity));
+                String price = String.valueOf(mEditItemPrice.getText());
+                if (price.equals("")) {
+                    price = "1";
+                }
+                newItem.setPrice(Integer.parseInt(price));
 
                 if (mLastPlace != null) {
                     newItem.setPlace(String.valueOf(mLastPlace.getName()), String.valueOf
@@ -109,8 +121,8 @@ public class ItemCreateFragment extends DialogFragment {
             }
         });
 
-        Button btnChoosePlace = (Button) mRoot.findViewById(R.id.btnChoosePlace);
-        btnChoosePlace.setOnClickListener(new View.OnClickListener() {
+        TextView tvChoosePlace = (TextView) mRoot.findViewById(R.id.tvChoosePlace);
+        tvChoosePlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
@@ -155,7 +167,7 @@ public class ItemCreateFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PLACE_PICKER_REQUEST) {
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == getActivity().RESULT_OK) {
             Place place = PlacePicker.getPlace(getActivity(), data);
             if (place == null) {
                 return;

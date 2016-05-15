@@ -6,11 +6,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,57 +57,53 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
+        TextView tvQuantity = (TextView) rootView.findViewById(R.id.tvQuantity);
+        String quantity = String.valueOf(mItem.getQuantity());
+        tvQuantity.setText(quantity);
+
         TextView tvPrice = (TextView) rootView.findViewById(R.id.tvPrice);
         String price = mItem.getPrice() + " Ft";
         tvPrice.setText(price);
-//        if (mItem != null) {
+
+        LinearLayout others = (LinearLayout) rootView.findViewById(R.id.otherDetails);
+
+        TextView tvPlaceName = (TextView) rootView.findViewById(R.id.tvPlaceName);
         if (mItem.getPlaceName() != null) {
-            TextView tvPlaceName = (TextView) rootView.findViewById(R.id.tvPlaceName);
             tvPlaceName.setText(mItem.getPlaceName());
+            tvPlaceName.setTextColor(ContextCompat.getColor(getActivity(), R.color.primaryText));
+
+            showMap(others, savedInstanceState);
+        } else {
+            tvPlaceName.setText("unknown");
+            tvPlaceName.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondaryText));
         }
 
-        if (mItem.getPlaceAddress() != null) {
-            TextView tvPlaceAddress = (TextView) rootView.findViewById(R.id.tvPlaceAddress);
-            tvPlaceAddress.setText(mItem.getPlaceAddress());
-        }
 
-        if (mItem.getPlaceLatLng() != null) {
-            mMapView = (MapView) rootView.findViewById(R.id.mapview);
-            mMapView.onCreate(savedInstanceState);
-
-            GoogleMapReady googleMapReady = new GoogleMapReady();
-            mMapView.getMapAsync(googleMapReady);
-        }
-
-        if (mItem.getPhotoFileName() != null) {
-
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-            File file = null;
-            File storageDir = getActivity().getExternalFilesDir(null);
-            File[] asd = storageDir.listFiles();
-            for (File s :
-                    asd) {
-                if (s.getName().contains(mItem.getPhotoFileName())) {
-                    file = s;
-                }
-            }
-
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath()/*mItem.getPhotoFileName() + "1088038940.jpg"*/, options);
-
-
-
-
-
-            ImageView imageView = (ImageView) rootView.findViewById(R.id.photo);
-            imageView.setImageBitmap(bitmap);
-//            imageView.setVisibility(View.VISIBLE);
-            imageView.requestLayout();
-            Log.d("Sdfsd", String.valueOf(imageView.isShown()));
-        }
-
+//        if (mItem.getPhotoFileName() != null) {
+//
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//
+//            File file = null;
+//            File storageDir = getActivity().getExternalFilesDir(null);
+//            File[] asd = storageDir.listFiles();
+//            for (File s :
+//                    asd) {
+//                if (s.getName().contains(mItem.getPhotoFileName())) {
+//                    file = s;
+//                }
+//            }
+//
+//            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath()/*mItem.getPhotoFileName() + "1088038940.jpg"*/, options);
+//
+//
+//            ImageView imageView = (ImageView) rootView.findViewById(R.id.photo);
+//
+//            imageView.setImageBitmap(bitmap);
+////            imageView.setVisibility(View.VISIBLE);
+//            imageView.requestLayout();
 //        }
+
 
         return rootView;
     }
@@ -112,31 +111,57 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+
+        if (mMapView != null) {
+            mMapView.onResume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+
+        if (mMapView != null) {
+            mMapView.onPause();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+
+        if (mMapView != null) {
+            mMapView.onDestroy();
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
+
+        if (mMapView != null) {
+            mMapView.onSaveInstanceState(outState);
+        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+        if (mMapView != null) {
+            mMapView.onLowMemory();
+        }
+    }
+
+    private void showMap(LinearLayout layout, Bundle savedInstanceState) {
+        mMapView = new MapView(getActivity());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
+        mMapView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
+        mMapView.onCreate(savedInstanceState);
+
+        GoogleMapReady googleMapReady = new GoogleMapReady();
+        mMapView.getMapAsync(googleMapReady);
+
+        layout.addView(mMapView);
     }
 
     private class GoogleMapReady implements OnMapReadyCallback {

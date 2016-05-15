@@ -4,40 +4,78 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvPrice"
-        style="?android:attr/textAppearanceLarge"
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+
+            <TextView
+                style="?android:attr/textAppearanceLarge"
+                android:padding="16dp"
+                android:text="Quantity"/>
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"/>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="?android:attr/textAppearanceLarge"
+                android:padding="16dp"
+                android:text="Price"/>
+
+            <TextView
+                android:id="@+id/tvPrice"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"/>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="?android:attr/textAppearanceLarge"
+                android:padding="16dp"
+                android:text="Place"/>
+
+            <TextView
+                android:id="@+id/tvPlaceName"
+                style="?android:attr/textAppearanceLarge"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                tools:context="com.zscseh93.ItemDetailFragment"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/otherDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvPlaceName"
-        style="?android:attr/textAppearanceLarge"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        tools:context="com.zscseh93.ItemDetailFragment"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvPlaceAddress"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"/>
 
-    <com.google.android.gms.maps.MapView
+    <!--<com.google.android.gms.maps.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="300dp"/>-->
 
-    <ImageView
+    <!--<ImageView
+        android:id="@+id/photo"
         android:layout_width="wrap_content"
         android:layout_height="400dp"
-        android:id="@+id/photo"
         android:adjustViewBounds="true"
-        android:scaleType="center"
-        android:contentDescription="item image"/>
+        android:contentDescription="item image"
+        android:scaleType="center"/>-->
 </LinearLayout>

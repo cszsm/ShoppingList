@@ -139,6 +139,16 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
     @Override
     public void update() {
         mItems.update();
+        updateSum();
+    }
+
+    public void updateSum() {
+        int sum = 0;
+        for (Item item : mItems.mValues) {
+            sum += item.getQuantity() * item.getPrice();
+        }
+        TextView tvSum = (TextView) findViewById(R.id.tvSum);
+        tvSum.setText(sum + " Ft");
     }
 
 //    @Override
@@ -172,6 +182,7 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
             holder.mItem = mValues.get(position);
             assert holder.mItem != null;
             holder.mNameView.setText(holder.mItem.getName());
+            holder.mQuantityView.setText(String.valueOf(holder.mItem.getQuantity()));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -211,18 +222,22 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
             mValues.get(position).delete();
             mValues.remove(position);
             notifyItemRemoved(position);
+
+            updateSum();
         }
 
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mNameView;
+            public final TextView mQuantityView;
             public Item mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mNameView = (TextView) view.findViewById(R.id.name);
+                mQuantityView = (TextView) view.findViewById(R.id.quantity);
             }
 
             @Override

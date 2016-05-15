@@ -69,6 +69,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         wakeLock.acquire();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.map_marker)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationText)
                 .setDefaults(Notification.DEFAULT_ALL)
