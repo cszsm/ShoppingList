@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.zscseh93"
           xmlns:android="http://schemas.android.com/apk/res/android">
-    
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true"/>
 
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.orm.SugarApp">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".ItemListActivity"
             android:label="@string/app_name"
@@ -31,13 +36,22 @@
                 android:value="com.zscseh93.ItemListActivity"/>
         </activity>
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-                   android:value="AIzaSyAm2fJBqjT25fCxR5hjgyvW4Jvo2-rRpRA"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAm2fJBqjT25fCxR5hjgyvW4Jvo2-rRpRA"/>
 
-        <meta-data android:name="DATABASE" android:value="shopping_list.db" />
-        <meta-data android:name="VERSION" android:value="2" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.zscseh93.data" />
+        <meta-data
+            android:name="DATABASE"
+            android:value="shopping_list.db"/>
+        <meta-data
+            android:name="VERSION"
+            android:value="2"/>
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true"/>
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.zscseh93.data"/>
     </application>
 
 </manifest>

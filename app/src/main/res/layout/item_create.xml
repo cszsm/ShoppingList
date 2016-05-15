@@ -24,14 +24,17 @@
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:text="Price"/>
+
             <EditText
                 android:id="@+id/newItemPrice"
                 android:inputType="number"/>
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,6 +55,16 @@
                     android:text="Choose"/>
             </LinearLayout>
 
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:text="Photo"/>
+
+            <Button
+                android:id="@+id/btnTakeAPhoto"
+                android:text="Take a photo"/>
         </TableRow>
     </TableLayout>
 

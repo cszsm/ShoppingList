@@ -1,22 +1,26 @@
 package com.zscseh93;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zscseh93.data.Item;
+
+import java.io.File;
 
 public class ItemDetailFragment extends Fragment {
 
@@ -70,6 +74,34 @@ public class ItemDetailFragment extends Fragment {
 
             GoogleMapReady googleMapReady = new GoogleMapReady();
             mMapView.getMapAsync(googleMapReady);
+        }
+
+        if (mItem.getPhotoFileName() != null) {
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+            File file = null;
+            File storageDir = getActivity().getExternalFilesDir(null);
+            File[] asd = storageDir.listFiles();
+            for (File s :
+                    asd) {
+                if (s.getName().contains(mItem.getPhotoFileName())) {
+                    file = s;
+                }
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath()/*mItem.getPhotoFileName() + "1088038940.jpg"*/, options);
+
+
+
+
+
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.photo);
+            imageView.setImageBitmap(bitmap);
+//            imageView.setVisibility(View.VISIBLE);
+            imageView.requestLayout();
+            Log.d("Sdfsd", String.valueOf(imageView.isShown()));
         }
 
 //        }

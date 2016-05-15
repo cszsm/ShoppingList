@@ -1,6 +1,8 @@
 package com.zscseh93;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +11,9 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+import com.zscseh93.data.Item;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -40,6 +45,15 @@ public class ItemDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        Item item = getIntent().getExtras().getParcelable(ItemDetailFragment.ARG_ITEM);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(item.getPhotoFileName() + ".jpg", options);
+
+        ImageView imageView = (ImageView) findViewById(R.id.toolbarImage);
+        imageView.setImageBitmap(bitmap);
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -53,7 +67,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putParcelable(ItemDetailFragment.ARG_ITEM, getIntent().getExtras().getParcelable(ItemDetailFragment.ARG_ITEM));
+            arguments.putParcelable(ItemDetailFragment.ARG_ITEM, item/*getIntent().getExtras().getParcelable(ItemDetailFragment.ARG_ITEM)*/);
 
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);

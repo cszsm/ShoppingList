@@ -23,38 +23,29 @@ public class Item extends SugarRecord implements Parcelable {
         }
     };
 
-    private String mItemId;
     private String mName;
     private int mPrice;
     private String mPlaceName = null;
     private String mPlaceAddress = null;
     private double mLat;
     private double mLng;
-
-    private static int sLastId = 0;
+    private String mPhotoFileName;
 
     public Item() {
     }
 
     public Item(String name) {
-        // TODO: megnézni ez így jó-e
-        mItemId = "id_" + sLastId++;
         mName = name;
     }
 
     public Item(Parcel parcel) {
-        mItemId = parcel.readString();
         mName = parcel.readString();
         mPrice = parcel.readInt();
         mPlaceName = parcel.readString();
         mPlaceAddress = parcel.readString();
         mLat = parcel.readDouble();
         mLng = parcel.readDouble();
-    }
-
-
-    public String getItemId() {
-        return mItemId;
+        mPhotoFileName = parcel.readString();
     }
 
     public String getName() {
@@ -85,6 +76,14 @@ public class Item extends SugarRecord implements Parcelable {
         return new LatLng(mLat, mLng);
     }
 
+    public void setPhotoFileName(String photoFileName) {
+        mPhotoFileName = photoFileName;
+    }
+
+    public String getPhotoFileName() {
+        return mPhotoFileName;
+    }
+
     public void setPlace(String placeName, String placeAddress, LatLng placeLatLng) {
         mPlaceName = placeName;
         mPlaceAddress = placeAddress;
@@ -99,12 +98,12 @@ public class Item extends SugarRecord implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mItemId);
         dest.writeString(mName);
         dest.writeInt(mPrice);
         dest.writeString(mPlaceName);
         dest.writeString(mPlaceAddress);
         dest.writeDouble(mLat);
         dest.writeDouble(mLng);
+        dest.writeString(mPhotoFileName);
     }
 }
