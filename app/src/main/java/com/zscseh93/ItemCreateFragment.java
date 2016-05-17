@@ -2,8 +2,10 @@ package com.zscseh93;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,13 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.zscseh93.data.Item;
@@ -80,7 +79,7 @@ public class ItemCreateFragment extends DialogFragment {
                 newItem.setQuantity(Integer.parseInt(quantity));
                 String price = String.valueOf(mEditItemPrice.getText());
                 if (price.equals("")) {
-                    price = "1";
+                    price = "0";
                 }
                 newItem.setPrice(Integer.parseInt(price));
 
@@ -88,25 +87,12 @@ public class ItemCreateFragment extends DialogFragment {
                     newItem.setPlace(String.valueOf(mLastPlace.getName()), String.valueOf
                             (mLastPlace.getAddress()), mLastPlace.getLatLng());
                     Log.d(TAG, String.valueOf(mLastPlace.getName()));
-
-//                    Geofence geofence = new Geofence.Builder().setRequestId(mLastPlace.getId())
-//                            .setCircularRegion(mLastPlace.getLatLng().latitude, mLastPlace
-//                                    .getLatLng().longitude, 1000)
-//                            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER).
-//                    setExpirationDuration(Geofence.NEVER_EXPIRE).build();
-//
-//                    GeofencingRequest geofencingRequest = getGeofencingRequest(geofence);
-//                    PendingIntent pendingIntent = getGeofencePendingIntent();
-//
-//                    GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this);
-//
-//                    LocationServices.GeofencingApi.addGeofences(, geofencingRequest, pendingIntent);
                 }
 
                 if (mLastImageFileName != null) {
                     newItem.setPhotoFileName(mLastImageFileName);
                 }
-//                mItemContainer.addItem(newItem);
+
                 newItem.save();
                 mItemContainer.update();
                 dismiss();
@@ -125,15 +111,21 @@ public class ItemCreateFragment extends DialogFragment {
         tvChoosePlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-                Intent intent = null;
-                try {
-                    intent = intentBuilder.build(getActivity());
-                } catch (GooglePlayServicesRepairableException |
-                        GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
+
+                if (isNetworkAvailable()) {
+                    PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+                    Intent intent = null;
+                    try {
+                        intent = intentBuilder.build(getActivity());
+                    } catch (GooglePlayServicesRepairableException |
+                            GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
+                    startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                } else {
+                    Toast.makeText(getActivity(), "Internet connection required!", Toast
+                            .LENGTH_SHORT).show();
                 }
-                startActivityForResult(intent, PLACE_PICKER_REQUEST);
             }
         });
 
@@ -167,7 +159,7 @@ public class ItemCreateFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PLACE_PICKER_REQUEST && resultCode == getActivity().RESULT_OK) {
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == Activity.RESULT_OK) {
             Place place = PlacePicker.getPlace(getActivity(), data);
             if (place == null) {
                 return;
@@ -187,16 +179,25 @@ public class ItemCreateFragment extends DialogFragment {
         return File.createTempFile(mLastImageFileName, ".jpg", storageDir);
     }
 
-    private GeofencingRequest getGeofencingRequest(Geofence geofence) {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofence(geofence);
-        return builder.build();
-    }
+//    private GeofencingRequest getGeofencingRequest(Geofence geofence) {
+//        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+//        builder.addGeofence(geofence);
+//        return builder.build();
+//    }
+//
+//    private PendingIntent getGeofencePendingIntent() {
+//        Intent intent = new Intent(getActivity(), GeofenceTransitionsIntentService.class);
+//        return PendingIntent.getService(getActivity(), 0, intent, PendingIntent
+// .FLAG_UPDATE_CURRENT);
+//    }
 
-    private PendingIntent getGeofencePendingIntent() {
-        Intent intent = new Intent(getActivity(), GeofenceTransitionsIntentService.class);
-        return PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity()
+                .getSystemService(Context
+                .CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public interface ItemContainer {

@@ -62,8 +62,14 @@ public class ItemDetailFragment extends Fragment {
         tvQuantity.setText(quantity);
 
         TextView tvPrice = (TextView) rootView.findViewById(R.id.tvPrice);
-        String price = mItem.getPrice() + " Ft";
-        tvPrice.setText(price);
+        if (mItem.getPrice() == 0) {
+            tvPrice.setText("unknown");
+            tvPrice.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondaryText));
+        } else {
+            String price = mItem.getPrice() + " Ft";
+            tvPrice.setText(price);
+            tvPrice.setTextColor(ContextCompat.getColor(getActivity(), R.color.primaryText));
+        }
 
         LinearLayout others = (LinearLayout) rootView.findViewById(R.id.otherDetails);
 

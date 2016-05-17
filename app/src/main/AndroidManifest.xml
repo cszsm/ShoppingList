@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -44,7 +45,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAm2fJBqjT25fCxR5hjgyvW4Jvo2-rRpRA"/>
-
         <meta-data
             android:name="DATABASE"
             android:value="shopping_list.db"/>
@@ -57,6 +57,9 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.zscseh93.data"/>
+
+        <activity android:name=".settings.SettingsActivity">
+        </activity>
     </application>
 
 </manifest>

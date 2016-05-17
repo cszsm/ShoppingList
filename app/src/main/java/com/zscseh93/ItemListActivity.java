@@ -10,15 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.zscseh93.data.Item;
+import com.zscseh93.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +137,39 @@ public class ItemListActivity extends AppCompatActivity implements ItemCreateFra
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(ItemListActivity.this, SettingsActivity.class);
+            startActivityForResult(intent, 14);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 14) {
+            if (resultCode == RESULT_OK) {
+                boolean isNotificationsEnabled = data.getBooleanExtra("NOTIFICATION_ENABLED", false);
+                if (isNotificationsEnabled) {
+                    mGeofenceStore.enable();
+                } else {
+                    mGeofenceStore.disable();
+                }
+            }
+        }
     }
 
     @Override

@@ -4,9 +4,11 @@ import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -56,13 +58,20 @@ public class GeofenceStore implements GoogleApiClient.ConnectionCallbacks, Googl
         mLocationRequest.setInterval(10000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        mGoogleApiClient.connect();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isNotificationEnabled = sharedPreferences.getBoolean("pref_notifications", true);
+
+        if (isNotificationEnabled) {
+            mGoogleApiClient.connect();
+        } else {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        if(mGeofences.isEmpty()) {
+        if (mGeofences.isEmpty()) {
             return;
         }
         mGeofencingRequest = new GeofencingRequest.Builder().addGeofences(mGeofences).build();
@@ -135,5 +144,13 @@ public class GeofenceStore implements GoogleApiClient.ConnectionCallbacks, Googl
         } else {
 
         }
+    }
+
+    public void enable() {
+        mGoogleApiClient.disconnect();
+    }
+
+    public void disable() {
+        mGoogleApiClient.connect();
     }
 }
