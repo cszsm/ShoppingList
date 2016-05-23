@@ -179,19 +179,6 @@ public class ItemCreateFragment extends DialogFragment {
         return File.createTempFile(mLastImageFileName, ".jpg", storageDir);
     }
 
-//    private GeofencingRequest getGeofencingRequest(Geofence geofence) {
-//        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-//        builder.addGeofence(geofence);
-//        return builder.build();
-//    }
-//
-//    private PendingIntent getGeofencePendingIntent() {
-//        Intent intent = new Intent(getActivity(), GeofenceTransitionsIntentService.class);
-//        return PendingIntent.getService(getActivity(), 0, intent, PendingIntent
-// .FLAG_UPDATE_CURRENT);
-//    }
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity()
                 .getSystemService(Context

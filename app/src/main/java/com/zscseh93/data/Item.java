@@ -78,10 +78,6 @@ public class Item extends SugarRecord implements Parcelable {
         return mPlaceName;
     }
 
-    public String getPlaceAddress() {
-        return mPlaceAddress;
-    }
-
     public LatLng getPlaceLatLng() {
         return new LatLng(mLat, mLng);
     }

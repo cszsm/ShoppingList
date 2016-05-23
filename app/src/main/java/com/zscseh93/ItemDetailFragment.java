@@ -84,33 +84,6 @@ public class ItemDetailFragment extends Fragment {
             tvPlaceName.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondaryText));
         }
 
-
-//        if (mItem.getPhotoFileName() != null) {
-//
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-//
-//            File file = null;
-//            File storageDir = getActivity().getExternalFilesDir(null);
-//            File[] asd = storageDir.listFiles();
-//            for (File s :
-//                    asd) {
-//                if (s.getName().contains(mItem.getPhotoFileName())) {
-//                    file = s;
-//                }
-//            }
-//
-//            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath()/*mItem.getPhotoFileName() + "1088038940.jpg"*/, options);
-//
-//
-//            ImageView imageView = (ImageView) rootView.findViewById(R.id.photo);
-//
-//            imageView.setImageBitmap(bitmap);
-////            imageView.setVisibility(View.VISIBLE);
-//            imageView.requestLayout();
-//        }
-
-
         return rootView;
     }
 

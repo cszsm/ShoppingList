@@ -81,13 +81,6 @@ public class GeofenceStore implements GoogleApiClient.ConnectionCallbacks, Googl
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission
                 .ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         PendingResult<Status> pendingResult = LocationServices.GeofencingApi.addGeofences
@@ -135,14 +128,11 @@ public class GeofenceStore implements GoogleApiClient.ConnectionCallbacks, Googl
         if (status.isSuccess()) {
             Log.v(LOG_TAG, "Success!");
         } else if (status.hasResolution()) {
-            // TODO Handle resolution
             Log.v(LOG_TAG, "Resolution");
         } else if (status.isCanceled()) {
             Log.v(LOG_TAG, "Canceled");
         } else if (status.isInterrupted()) {
             Log.v(LOG_TAG, "Interrupted");
-        } else {
-
         }
     }
 
